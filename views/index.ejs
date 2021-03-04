@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Status FII's</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Sigla</th>
+                <th scope="col">Valor Atual</th>
+                <th scope="col">DY 12m</th>
+                <th scope="col">Rend. Méd. Mensal</th>
+                <th scope="col">Retorno/Valor Atual</th>
+                <th scope="col">Valor Patrimonial</th>
+                <th scope="col">P/VP</th>
+                <th scope="col">% mais caro que patrimônio</th>
+                <th scope="col">Segmento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (ativos) {
+                let i = 0;    
+            %>
+                <% ativos.forEach(function(a){ i++; %>
+                    <% if(a.dy12 > 9) { %>
+                        <tr class="table-success">
+                    <% } else if(a.dy12 > 6) { %>
+                        <tr class="table-warning">
+                    <% } else { %>
+                        <tr class="table-danger">
+                    <% } %>
+                        <th scope="row"><%= i %></th>
+                        <td><%= a.sigla %></td>
+                        <td><%= a.valorAtual %></td>
+                        <td><%= a.dy12 %></td>
+                        <td><%= a.rmm.toFixed(5) %></td>
+                        <td><%= a.rmmByValorAtual.toFixed(5) %></td>
+                        <td><%= a.valorPatrimonial %></td>
+                        <td><%= a.pSobreVp %></td>
+                        <td><%= a.percentValorAtual.toFixed(5) %></td>
+                        <td><%= a.segmento.substring(0, 20) %></td>
+                    </tr>
+                <% }); %>
+            <% } %>
+        </tbody>
+    </table>
+    
+</body>
+
+</html>
