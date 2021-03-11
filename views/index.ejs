@@ -11,6 +11,9 @@
 </head>
 
 <body>
+    <div>
+        <p id="texto"></p>
+    </div>
     <table class="table table-hover table-sm">
         <thead>
             <tr>
@@ -54,6 +57,45 @@
         </tbody>
     </table>
     
+    <script>
+        var i = 0;
+        var txt = ' ...';
+        var speed = 100;
+
+        function typeWriter() {
+            if(i == 0) {
+                document.getElementById("texto").innerHTML = 'Atualizando ';
+            }
+            if (i < txt.length) {
+                document.getElementById("texto").innerHTML += txt.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            } else {
+                i = 0;
+            }
+        }
+
+        var refreshIntervalId = setInterval(typeWriter, 1000);
+
+        function httpGetAsync(theUrl, callback) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    callback(JSON.parse(xmlHttp.responseText));
+            }
+            xmlHttp.open("GET", theUrl, true);
+            xmlHttp.send(null);
+        }
+
+        httpGetAsync('/is-updated', function (result){
+            if(result.updated) {
+                location.reload();
+            } else {
+                clearInterval(refreshIntervalId);
+                document.getElementById("texto").style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>

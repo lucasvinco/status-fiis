@@ -2,7 +2,6 @@ const jsonfile = require('jsonfile');
 const axios = require('axios');
 const cheerio = require('cheerio');
 const express = require('express');
-const ejs = require('ejs');
 
 const app = express();
 const port = 3000;
@@ -36,7 +35,8 @@ const ativos = [{
 { sigla: "mfai11" },
 { sigla: "rect11" },
 { sigla: "deva11" },
-{ sigla: "bari11" }
+{ sigla: "bari11" },
+{ sigla: "kisu11" }
 ];
 
 const asyncOperation = (value, index) => {
@@ -143,13 +143,26 @@ function readInJSON() {
     })
 }
 
-app.get('/', async (req, res) => {
+app.get('/is-updated', async (req, res) => {
     let result = await readInJSON();
+    let updated = false;
 
     if (result.expires < Date.now()) {
         await updateDb();
-        result = await readInJSON();
+        updated = true;
     }
+
+    res.json({updated: updated});
+});
+
+app.get('/', async (req, res) => {
+    let result = await readInJSON();
+
+    // if (result.expires < Date.now()) {
+        // updateDb();
+        // await updateDb();
+        // result = await readInJSON();
+    // }
 
     res.render('index', { ativos: result.ativos });
 })
